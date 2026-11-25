@@ -1,0 +1,37 @@
+[
+  {
+    "slug": "pottery",
+    "name": "Pottery",
+    "image": "/images/categories/pottery.svg"
+  },
+  {
+    "slug": "textiles",
+    "name": "Textiles",
+    "image": "/images/categories/textiles.svg"
+  },
+  {
+    "slug": "woodwork",
+    "name": "Woodwork",
+    "image": "/images/categories/woodwork.svg"
+  },
+  {
+    "slug": "jewellery",
+    "name": "Jewellery",
+    "image": "/images/categories/jewellery.svg"
+  },
+  {
+    "slug": "home-decor",
+    "name": "Home Decor",
+    "image": "/images/categories/home-decor.svg"
+  },
+  {
+    "slug": "handloom",
+    "name": "Handloom",
+    "image": "/images/categories/handloom.svg"
+  },
+  {
+    "slug": "bamboo-cane",
+    "name": "Bamboo & Cane",
+    "image": "/images/categories/bamboo-cane.svg"
+  }
+]

@@ -1,0 +1,152 @@
+[
+  {
+    "id": "blue-pottery-vase",
+    "name": "Hand-thrown Blue Pottery Vase",
+    "category": "pottery",
+    "artisanId": "ramesh-kumar",
+    "price": 1800,
+    "rating": 4.8,
+    "reviews": 64,
+    "region": "Jaipur, Rajasthan",
+    "image": "/images/products/blue-pottery-vase-1.svg",
+    "gallery": [
+      "/images/products/blue-pottery-vase-1.svg",
+      "/images/products/blue-pottery-vase-2.svg",
+      "/images/products/blue-pottery-vase-3.svg"
+    ],
+    "description": "A hand-thrown vase in the centuries-old Jaipur blue pottery tradition, glazed with natural cobalt oxide and fired twice for depth of colour. No two pieces are ever identical.",
+    "materials": "Quartz clay, natural cobalt glaze",
+    "origin": "Jaipur, Rajasthan",
+    "care": "Wipe with a dry cloth. Not microwave or dishwasher safe."
+  },
+  {
+    "id": "madhubani-canvas",
+    "name": "Madhubani Fish & Lotus Canvas",
+    "category": "home-decor",
+    "artisanId": "saraswati-devi",
+    "price": 3200,
+    "rating": 5,
+    "reviews": 41,
+    "region": "Madhubani, Bihar",
+    "image": "/images/products/madhubani-canvas-1.svg",
+    "gallery": [
+      "/images/products/madhubani-canvas-1.svg",
+      "/images/products/madhubani-canvas-2.svg"
+    ],
+    "description": "A hand-painted Madhubani canvas depicting fish and lotus motifs, symbols of fertility and abundance, rendered in natural turmeric and sindoor pigments.",
+    "materials": "Canvas, natural pigment",
+    "origin": "Madhubani, Bihar",
+    "care": "Keep away from direct sunlight and moisture."
+  },
+  {
+    "id": "kanchipuram-saree",
+    "name": "Kanchipuram Silk Saree — Temple Border",
+    "category": "handloom",
+    "artisanId": "lakshmi-bai",
+    "price": 12800,
+    "rating": 5,
+    "reviews": 29,
+    "region": "Kanchipuram, Tamil Nadu",
+    "image": "/images/products/kanchipuram-saree-1.svg",
+    "gallery": [
+      "/images/products/kanchipuram-saree-1.svg",
+      "/images/products/kanchipuram-saree-2.svg"
+    ],
+    "description": "A pure mulberry silk Kanchipuram saree with a hand-woven temple border, joined using the traditional korvai technique. Fourteen days on the pit loom.",
+    "materials": "Mulberry silk, zari thread",
+    "origin": "Kanchipuram, Tamil Nadu",
+    "care": "Dry clean only. Store folded in muslin cloth."
+  },
+  {
+    "id": "wooden-elephant",
+    "name": "Carved Rosewood Elephant",
+    "category": "woodwork",
+    "artisanId": "ramesh-kumar",
+    "price": 2400,
+    "rating": 4.7,
+    "reviews": 53,
+    "region": "Jaipur, Rajasthan",
+    "image": "/images/products/wooden-elephant-1.svg",
+    "gallery": [
+      "/images/products/wooden-elephant-1.svg",
+      "/images/products/wooden-elephant-2.svg"
+    ],
+    "description": "A single-block carved rosewood elephant, hand-chiselled and finished with vegetable oil to bring out the natural wood grain.",
+    "materials": "Sheesham (rosewood)",
+    "origin": "Jaipur, Rajasthan",
+    "care": "Dust with a soft cloth. Re-oil yearly."
+  },
+  {
+    "id": "bamboo-lamp",
+    "name": "Woven Bamboo Pendant Lamp",
+    "category": "bamboo-cane",
+    "artisanId": "anjali-tanti",
+    "price": 2100,
+    "rating": 4.6,
+    "reviews": 18,
+    "region": "Majuli, Assam",
+    "image": "/images/products/bamboo-lamp-1.svg",
+    "gallery": [
+      "/images/products/bamboo-lamp-1.svg",
+      "/images/products/bamboo-lamp-2.svg"
+    ],
+    "description": "A pendant lamp woven from smoked bamboo strips, casting warm dappled light. Wired for a standard E27 bulb, sold without the bulb.",
+    "materials": "Smoked bamboo, jute cord",
+    "origin": "Majuli, Assam",
+    "care": "Dry dust only. Keep away from open flame."
+  },
+  {
+    "id": "jute-basket-set",
+    "name": "Hand-braided Jute Basket Set",
+    "category": "bamboo-cane",
+    "artisanId": "anjali-tanti",
+    "price": 1450,
+    "rating": 4.5,
+    "reviews": 22,
+    "region": "Majuli, Assam",
+    "image": "/images/products/jute-basket-set-1.svg",
+    "gallery": [
+      "/images/products/jute-basket-set-1.svg"
+    ],
+    "description": "A set of three nesting storage baskets, hand-braided from jute fibre over a bamboo frame.",
+    "materials": "Jute, bamboo",
+    "origin": "Majuli, Assam",
+    "care": "Spot clean with a damp cloth."
+  },
+  {
+    "id": "silver-jhumka",
+    "name": "Oxidised Silver Jhumka Earrings",
+    "category": "jewellery",
+    "artisanId": "lakshmi-bai",
+    "price": 980,
+    "rating": 4.9,
+    "reviews": 77,
+    "region": "Kanchipuram, Tamil Nadu",
+    "image": "/images/products/silver-jhumka-1.svg",
+    "gallery": [
+      "/images/products/silver-jhumka-1.svg"
+    ],
+    "description": "Traditional oxidised silver jhumka earrings with a bell-flower drop, handcrafted by a family of silversmiths.",
+    "materials": "Sterling silver, oxidised finish",
+    "origin": "Kanchipuram, Tamil Nadu",
+    "care": "Keep dry. Store in an airtight pouch to slow tarnishing."
+  },
+  {
+    "id": "block-print-cushion",
+    "name": "Hand Block-printed Cushion Cover",
+    "category": "textiles",
+    "artisanId": "ramesh-kumar",
+    "price": 650,
+    "rating": 4.6,
+    "reviews": 35,
+    "region": "Jaipur, Rajasthan",
+    "image": "/images/products/block-print-cushion-1.svg",
+    "gallery": [
+      "/images/products/block-print-cushion-1.svg"
+    ],
+    "description": "A cotton cushion cover hand block-printed with a hand-carved teak block, using natural indigo and madder dyes.",
+    "materials": "Cotton, natural dye",
+    "origin": "Jaipur, Rajasthan",
+    "care": "Hand wash cold, separately, dry in shade."
+  }
+]

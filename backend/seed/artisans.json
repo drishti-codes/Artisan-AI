@@ -1,0 +1,54 @@
+[
+  {
+    "id": "saraswati-devi",
+    "name": "Saraswati Devi",
+    "craft": "Madhubani Painting",
+    "region": "Madhubani, Bihar",
+    "rating": 4.9,
+    "years": 22,
+    "image": "/images/artisans/saraswati-devi.svg",
+    "cover": "/images/covers/saraswati-devi.svg",
+    "bio": "My craft has been passed down through three generations. I learned to grind pigment from turmeric and marigold before I learned to read.",
+    "story": "Saraswati grew up watching her grandmother paint the walls of their courtyard during festivals. Today she leads a collective of twelve women in her village, teaching the same motifs that once decorated mud walls, now carried onto canvas and paper for homes across the world.",
+    "process": "Natural pigments — turmeric, sindoor, charcoal — are ground by hand and mixed with tree gum. Each panel is drawn freehand, without a pencil sketch, using bamboo twigs dipped in pigment."
+  },
+  {
+    "id": "ramesh-kumar",
+    "name": "Ramesh Kumar",
+    "craft": "Wood Carving",
+    "region": "Jaipur, Rajasthan",
+    "rating": 4.8,
+    "years": 25,
+    "image": "/images/artisans/ramesh-kumar.svg",
+    "cover": "/images/covers/ramesh-kumar.svg",
+    "bio": "I have been making wooden toys and carved decor for twenty-five years, the same way my father taught me in our courtyard workshop.",
+    "story": "Ramesh took over his father’s workshop at nineteen. He now works with sheesham and mango wood sourced from managed local forests, and has trained four apprentices from his neighbourhood.",
+    "process": "Timber is seasoned for six months before carving. Each piece is shaped with hand chisels, sanded in stages, and finished with a food-safe vegetable oil rather than synthetic lacquer."
+  },
+  {
+    "id": "lakshmi-bai",
+    "name": "Lakshmi Bai",
+    "craft": "Handloom Weaving",
+    "region": "Kanchipuram, Tamil Nadu",
+    "rating": 5,
+    "years": 30,
+    "image": "/images/artisans/lakshmi-bai.svg",
+    "cover": "/images/covers/lakshmi-bai.svg",
+    "bio": "A single silk saree takes me nearly two weeks on the pit loom. I have never wanted to rush what took my mother a lifetime to teach me.",
+    "story": "Lakshmi runs a small loom house with her two daughters, one of the last handloom units in her lane still weaving pure Kanchipuram silk without power assistance.",
+    "process": "Mulberry silk threads are hand-dyed in small batches, then woven on a traditional pit loom using a korvai technique to join contrasting-colour borders."
+  },
+  {
+    "id": "anjali-tanti",
+    "name": "Anjali Tanti",
+    "craft": "Bamboo Craft",
+    "region": "Majuli, Assam",
+    "rating": 4.7,
+    "years": 15,
+    "image": "/images/artisans/anjali-tanti.svg",
+    "cover": "/images/covers/anjali-tanti.svg",
+    "bio": "Bamboo grows behind my house. I wanted to show people it can be more than a fence — it can be a lamp, a basket, a chair.",
+    "story": "Anjali left a garment-factory job in Guwahati to return to Majuli and revive her family’s bamboo weaving practice, now selling functional homeware to buyers across India.",
+    "process": "Bamboo poles are cut, smoked to prevent pests, then split into fine strips that are woven and lacquered by hand."
+  }
+]
