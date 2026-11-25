@@ -8,53 +8,73 @@ async function generateJSON({ system, prompt, temperature = 0.3 }) {
     throw new AppError('Unsupported LLM provider', 400);
   }
   const apiKey = process.env.GEMINI_API_KEY;
-  const model = process.env.LLM_MODEL;
+  // Default model if env var missing (new default)
+  const model = process.env.LLM_MODEL || 'gemini-3-flash-preview';
   if (!apiKey) {
     throw new AppError('Missing GEMINI_API_KEY in environment', 503);
   }
-  if (!model) {
-    throw new AppError('Missing LLM_MODEL in environment', 503);
-  }
 
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
-  const body = {
+  const baseBody = {
     systemInstruction: { parts: [{ text: system }] },
     contents: [{ role: 'user', parts: [{ text: prompt }] }],
     generationConfig: { responseMimeType: 'application/json', temperature },
   };
 
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 20000); // 20 s
-
-  const makeRequest = async () => {
-    const res = await fetch(`${url}?key=${apiKey}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-      signal: controller.signal,
-    });
-    clearTimeout(timeout);
-    if (res.status === 429 || res.status >= 500) {
-      // retry once after 1 s
-      await new Promise(r => setTimeout(r, 1000));
-      return fetch(`${url}?key=${apiKey}`, {
+  // Helper to perform a fetch with its own AbortController + 12s timeout
+  async function fetchWithTimeout(bodyObj) {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 12000); // 12 s
+    try {
+      const res = await fetch(url, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
+        headers: {
+          'Content-Type': 'application/json',
+          'x-goog-api-key': apiKey,
+        },
+        body: JSON.stringify(bodyObj),
         signal: controller.signal,
       });
+      return res;
+    } finally {
+      clearTimeout(timeout);
     }
-    return res;
-  };
+  }
 
+  // First request
   let response;
   try {
-    response = await makeRequest();
+    response = await fetchWithTimeout(baseBody);
   } catch (err) {
     if (err.name === 'AbortError') {
       throw new AppError('LLM request timed out', 503);
     }
     throw err;
+  }
+
+  // If non‑2xx, try to extract Google error message
+  if (!response.ok) {
+    let errMsg = 'LLM request failed';
+    try {
+      const errJson = await response.json();
+      if (errJson.error && errJson.error.message) errMsg = errJson.error.message;
+    } catch (_) {}
+    throw new AppError(errMsg, response.status);
+  }
+
+  // Retry on 429 / 5xx – one retry after 1 s
+  if (response.status === 429 || response.status >= 500) {
+    await new Promise(r => setTimeout(r, 1000));
+    // Fresh body for retry (same as baseBody)
+    response = await fetchWithTimeout(baseBody);
+    if (!response.ok) {
+      let errMsg = 'LLM request failed (retry)';
+      try {
+        const errJson = await response.json();
+        if (errJson.error && errJson.error.message) errMsg = errJson.error.message;
+      } catch (_) {}
+      throw new AppError(errMsg, response.status);
+    }
   }
 
   const json = await response.json();
@@ -70,15 +90,20 @@ async function generateJSON({ system, prompt, temperature = 0.3 }) {
   try {
     return JSON.parse(text);
   } catch (e) {
-    // retry with extra instruction
-    const retryBody = { ...body };
-    retryBody.contents[0].parts[0].text = `${prompt}\n\nReturn ONLY valid JSON.`;
-    const retryRes = await fetch(`${url}?key=${apiKey}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(retryBody),
-      signal: controller.signal,
-    });
+    // retry with extra instruction – build a fresh body
+    const retryBody = {
+      ...baseBody,
+      contents: [{ role: 'user', parts: [{ text: `${prompt}\n\nReturn ONLY valid JSON.` }] }],
+    };
+    const retryRes = await fetchWithTimeout(retryBody);
+    if (!retryRes.ok) {
+      let errMsg = 'LLM request failed (JSON retry)';
+      try {
+        const errJson = await retryRes.json();
+        if (errJson.error && errJson.error.message) errMsg = errJson.error.message;
+      } catch (_) {}
+      throw new AppError(errMsg, retryRes.status);
+    }
     const retryJson = await retryRes.json();
     const retryParts = retryJson.candidates?.[0]?.content?.parts || [];
     let retryText = retryParts.map(p => p.text || '').join('').replace(/```json\n?|```/g, '').trim();
