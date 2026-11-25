@@ -55,7 +55,7 @@ export function AuthProvider({ children }) {
       user,
       ready,
       login: async (email, password) => finish(await api('/auth/login', { method: 'POST', body: { email, password } })),
-      register: async (name, email, password) => finish(await api('/auth/register', { method: 'POST', body: { name, email, password } })),
+      register: async (name, email, password, role = 'customer') => finish(await api('/auth/register', { method: 'POST', body: { name, email, password, role } })),
       logout: () => {
         try {
           window.localStorage.removeItem(TOKEN_KEY);

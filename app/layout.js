@@ -2,8 +2,7 @@ import { Fraunces, Work_Sans } from 'next/font/google';
 import './globals.css';
 import { AuthProvider } from '@/context/AuthContext';
 import { CartProvider } from '@/context/CartContext';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
+import LayoutShell from '@/components/LayoutShell';
 
 const fraunces = Fraunces({
   subsets: ['latin'],
@@ -27,13 +26,11 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${fraunces.variable} ${workSans.variable}`}>
+    <html lang="en" className={`${fraunces.variable} ${workSans.variable}`}> 
       <body className="font-body grain bg-cream text-brown">
         <AuthProvider>
           <CartProvider>
-            <Navbar />
-            <main>{children}</main>
-            <Footer />
+            <LayoutShell>{children}</LayoutShell>
           </CartProvider>
         </AuthProvider>
       </body>

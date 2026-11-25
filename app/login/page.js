@@ -12,6 +12,7 @@ export default function LoginPage() {
   const router = useRouter();
 
   const [name, setName] = useState('');
+  const [role, setRole] = useState('customer'); // new state for role selection
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
@@ -35,9 +36,19 @@ export default function LoginPage() {
     }
     setBusy(true);
     try {
-      if (mode === 'login') await login(email, password);
-      else await register(name, email, password);
-      router.push(nextPath());
+      let userData;
+      if (mode === 'login') {
+        userData = await login(email, password);
+      } else {
+        userData = await register(name, email, password, role);
+      }
+      // Resolve possible shape differences (login returns user, register returns user)
+      const userRole = (userData && userData.role) || (userData && userData.user && userData.user.role);
+      if (userRole === 'artisan') {
+        router.push('/seller');
+      } else {
+        router.push(nextPath());
+      }
     } catch (err) {
       setError(err.message);
     } finally {
@@ -97,30 +108,59 @@ export default function LoginPage() {
             className="space-y-4"
           >
             {mode === 'register' && (
-              <div>
-                <label className="text-sm text-brown/60 block mb-1.5">Name</label>
-                <input required value={name} onChange={(e) => setName(e.target.value)} className={inputClass} />
-              </div>
+              <>
+                <div>
+                  <label className="text-sm text-brown/60 block mb-1.5">Name</label>
+                  <input required value={name} onChange={(e) => setName(e.target.value)} className={inputClass} />
+                </div>
+                <p className="text-sm text-brown/60 mb-1.5 mt-2">I am registering as:</p>
+                <div className="flex gap-4 mb-4">
+                  <label className="flex items-center gap-1">
+                    <input
+                      type="radio"
+                      name="role"
+                      value="customer"
+                      checked={role === 'customer'}
+                      onChange={() => setRole('customer')}
+                    />
+                    <span className="text-sm">Customer</span>
+                  </label>
+                  <label className="flex items-center gap-1">
+                    <input
+                      type="radio"
+                      name="role"
+                      value="artisan"
+                      checked={role === 'artisan'}
+                      onChange={() => setRole('artisan')}
+                    />
+                    <span className="text-sm">Artisan (seller)</span>
+                  </label>
+                </div>
+              </>
             )}
             <div>
               <label className="text-sm text-brown/60 block mb-1.5">Email</label>
               <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className={inputClass} />
             </div>
+
             <div>
               <label className="text-sm text-brown/60 block mb-1.5">Password</label>
               <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} className={inputClass} />
             </div>
+
             {mode === 'register' && (
               <div>
                 <label className="text-sm text-brown/60 block mb-1.5">Confirm password</label>
                 <input type="password" required value={confirm} onChange={(e) => setConfirm(e.target.value)} className={inputClass} />
               </div>
+
             )}
 
             {mode === 'login' && (
               <div className="text-right">
                 <a href="#" className="text-xs text-terracotta hover:underline underline-offset-4">Forgot password?</a>
               </div>
+
             )}
 
             {error && <p role="alert" className="text-sm text-terracotta">{error}</p>}
