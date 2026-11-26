@@ -5,6 +5,7 @@ import { Star, MapPin } from 'lucide-react';
 import { cache } from 'react';
 import { api } from '@/lib/api';
 import ProductCard from '@/components/ProductCard';
+import ArtisanAvatar from '@/components/artisan/ArtisanAvatar';
 import FollowButton from './FollowButton';
 
 export const dynamic = 'force-dynamic';
@@ -28,45 +29,71 @@ export default async function ArtisanProfilePage({ params }) {
   if (!artisan) notFound();
   const artisanProducts = (await api(`/artisans/${artisan.id}/products`)).map((p) => ({ ...p, artisanName: artisan.name }));
 
+  const hasStory = Boolean(artisan.story && artisan.story.trim());
+  const hasProcess = Boolean(artisan.process && artisan.process.trim());
+  const hasBio = Boolean(artisan.bio && artisan.bio.trim());
+
   return (
     <div>
-      <div className="relative h-[42vh] min-h-[280px]">
-        <Image src={artisan.cover} alt={artisan.region} fill priority sizes="100vw" className="object-cover" />
+      <div className="relative h-[42vh] min-h-[280px] bg-gradient-to-br from-forest via-forest-light to-brown">
+        {artisan.cover && (
+          <Image src={artisan.cover} alt={artisan.region} fill priority sizes="100vw" className="object-cover" />
+        )}
         <div className="absolute inset-0 bg-brown/40" />
       </div>
 
       <div className="container-page -mt-20 relative pb-16">
         <div className="bg-cream border hairline rounded-sm p-6 sm:p-10 flex flex-col sm:flex-row gap-8 items-start">
-          <div className="relative w-28 h-28 rounded-full overflow-hidden border-4 border-cream -mt-16 sm:-mt-24 shrink-0 shadow-md">
-            <Image src={artisan.image} alt={artisan.name} fill sizes="112px" className="object-cover" />
-          </div>
+          <ArtisanAvatar
+            src={artisan.image}
+            name={artisan.name}
+            sizeClass="w-28 h-28"
+            textClass="text-3xl"
+            className="-mt-16 sm:-mt-24 shadow-md"
+            sizes="112px"
+          />
           <div className="flex-1">
             <h1 className="font-display text-3xl sm:text-4xl text-brown">{artisan.name}</h1>
+            {artisan.shopName && (
+              <p className="text-sm text-brown/65 mt-0.5">{artisan.shopName}</p>
+            )}
             <p className="text-terracotta mt-1">{artisan.craft}</p>
             <div className="flex flex-wrap items-center gap-4 mt-3 text-sm text-brown/60">
               <span className="flex items-center gap-1"><MapPin size={13} /> {artisan.region}</span>
-              <span className="flex items-center gap-1"><Star size={13} className="fill-gold text-gold" /> {artisan.rating}</span>
-              <span>{artisan.years} years of practice</span>
+              {artisan.rating > 0 ? (
+                <span className="flex items-center gap-1"><Star size={13} className="fill-gold text-gold" /> {artisan.rating}</span>
+              ) : (
+                <span>New artisan</span>
+              )}
+              {artisan.years > 0 && (
+                <span>{artisan.years === 1 ? '1 year of practice' : `${artisan.years} years of practice`}</span>
+              )}
             </div>
-            <p className="font-display italic text-lg text-brown/80 mt-5 max-w-lg leading-snug">
-              "{artisan.bio}"
-            </p>
+            {hasBio && (
+              <p className="font-display italic text-lg text-brown/80 mt-5 max-w-lg leading-snug">
+                "{artisan.bio}"
+              </p>
+            )}
           </div>
           <FollowButton artisanId={artisan.id} />
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-10 mt-14">
-          <div>
-            <p className="text-terracotta text-sm mb-2">Her Story</p>
-            <h2 className="font-display text-2xl text-brown mb-4">A craft carried through generations</h2>
-            <p className="text-brown/65 leading-relaxed">{artisan.story}</p>
+        {(hasStory || hasProcess) && (
+          <div className="grid lg:grid-cols-2 gap-10 mt-14">
+            {hasStory && (
+              <div>
+                <p className="text-terracotta text-sm mb-2">The Story</p>
+                <p className="text-brown/65 leading-relaxed whitespace-pre-line">{artisan.story}</p>
+              </div>
+            )}
+            {hasProcess && (
+              <div>
+                <p className="text-terracotta text-sm mb-2">The Craft</p>
+                <p className="text-brown/65 leading-relaxed whitespace-pre-line">{artisan.process}</p>
+              </div>
+            )}
           </div>
-          <div>
-            <p className="text-terracotta text-sm mb-2">Her Craft</p>
-            <h2 className="font-display text-2xl text-brown mb-4">How the work comes together</h2>
-            <p className="text-brown/65 leading-relaxed">{artisan.process}</p>
-          </div>
-        </div>
+        )}
 
         {artisanProducts.length > 0 && (
           <div className="mt-16 pt-14 border-t hairline">

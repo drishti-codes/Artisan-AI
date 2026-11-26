@@ -28,7 +28,7 @@ async function listProducts(query) {
   if (asText(query.maxPrice) && !Number.isNaN(max)) filter.price = { ...filter.price, $lte: max };
 
   const sorts = { 'price-asc': { price: 1 }, 'price-desc': { price: -1 }, rating: { rating: -1 } };
-  const sort = sorts[asText(query.sort)] || { _id: 1 }; // "featured" = original order
+  const sort = sorts[asText(query.sort)] || { createdAt: -1, _id: -1 }; // newest first by default
 
   const [items, total] = await Promise.all([
     Product.find(filter).sort(sort).skip((page - 1) * limit).limit(limit),

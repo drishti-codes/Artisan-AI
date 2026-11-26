@@ -9,11 +9,16 @@ import { formatINR } from '@/lib/data';
 import { useCart } from '@/context/CartContext';
 import ProductCard from '@/components/ProductCard';
 
+const FALLBACK_IMAGE = '/images/placeholder-product.svg';
+
 export default function ProductDetailClient({ product, artisan, related }) {
   const [activeImage, setActiveImage] = useState(0);
   const [qty, setQty] = useState(1);
   const [added, setAdded] = useState(false);
   const { addItem } = useCart();
+  const gallery = (Array.isArray(product.gallery) && product.gallery.filter(Boolean).length > 0)
+    ? product.gallery.filter(Boolean)
+    : [product.image || FALLBACK_IMAGE];
 
   const handleAdd = () => {
     addItem(product, qty);
@@ -41,13 +46,13 @@ export default function ProductDetailClient({ product, artisan, related }) {
                 transition={{ duration: 0.3 }}
                 className="absolute inset-0"
               >
-                <Image src={product.gallery[activeImage]} alt={product.name} fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" />
+                <Image src={gallery[activeImage] || FALLBACK_IMAGE} alt={product.name} fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" />
               </motion.div>
             </AnimatePresence>
           </div>
-          {product.gallery.length > 1 && (
+          {gallery.length > 1 && (
             <div className="flex gap-3">
-              {product.gallery.map((img, i) => (
+              {gallery.map((img, i) => (
                 <button
                   key={img}
                   onClick={() => setActiveImage(i)}

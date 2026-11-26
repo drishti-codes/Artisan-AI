@@ -21,10 +21,20 @@ export default function LoginPage() {
 
   const inputClass = 'w-full border hairline rounded-md px-4 py-2.5 text-sm bg-white/70 focus:outline-none focus:border-terracotta';
 
-  // Where to go after login (for example /checkout). Only internal paths are allowed.
-  const nextPath = () => {
+  // Where to go after login (for example /checkout). Only safe internal paths for the user's role are allowed.
+  const nextPath = (userRole) => {
     const next = new URLSearchParams(window.location.search).get('next');
-    return next && next.startsWith('/') && !next.startsWith('//') ? next : '/';
+    if (!next || !next.startsWith('/') || next.startsWith('//')) return null;
+    if (userRole === 'customer' && (next.startsWith('/artisan') || next.startsWith('/seller'))) {
+      return null;
+    }
+    if (
+      (userRole === 'artisan' || userRole === 'admin') &&
+      (next.startsWith('/cart') || next.startsWith('/checkout') || next.startsWith('/orders'))
+    ) {
+      return null;
+    }
+    return next;
   };
 
   const handleSubmit = async (e) => {
@@ -42,12 +52,20 @@ export default function LoginPage() {
       } else {
         userData = await register(name, email, password, role);
       }
-      // Resolve possible shape differences (login returns user, register returns user)
-      const userRole = (userData && userData.role) || (userData && userData.user && userData.user.role);
+      const loggedUser = (userData && userData.user) || userData || {};
+      const userRole = loggedUser.role;
       if (userRole === 'artisan') {
-        router.push('/seller');
+        if (!loggedUser.onboardingCompleted) {
+          router.push('/artisan/onboarding');
+        } else {
+          const safeNext = nextPath(userRole);
+          router.push(safeNext && safeNext.startsWith('/artisan') ? safeNext : '/artisan/dashboard');
+        }
+      } else if (userRole === 'admin') {
+        const safeNext = nextPath(userRole);
+        router.push(safeNext && safeNext.startsWith('/artisan') ? safeNext : '/artisan/dashboard');
       } else {
-        router.push(nextPath());
+        router.push(nextPath(userRole) || '/');
       }
     } catch (err) {
       setError(err.message);
@@ -74,9 +92,12 @@ export default function LoginPage() {
           <Link href="/orders" className="w-full border hairline rounded-full px-6 py-3 text-sm hover:border-terracotta hover:text-terracotta transition-colors block mb-3">
             My orders
           </Link>
-          {user.role === 'artisan' && (
-            <Link href="/seller" className="w-full border hairline rounded-full px-6 py-3 text-sm hover:border-terracotta hover:text-terracotta transition-colors block mb-3">
-              Seller dashboard
+          {(user.role === 'artisan' || user.role === 'admin') && (
+            <Link
+              href={user.role === 'artisan' && !user.onboardingCompleted ? '/artisan/onboarding' : '/artisan/dashboard'}
+              className="w-full border hairline rounded-full px-6 py-3 text-sm hover:border-terracotta hover:text-terracotta transition-colors block mb-3"
+            >
+              {user.role === 'artisan' && !user.onboardingCompleted ? 'Complete onboarding' : 'Artisan dashboard'}
             </Link>
           )}
           <button onClick={logout} className="w-full border hairline rounded-full px-6 py-3 text-sm hover:border-terracotta hover:text-terracotta transition-colors">

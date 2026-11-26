@@ -37,8 +37,38 @@ export async function api(path, { method = 'GET', body, token } = {}) {
 export const getCategories = () => api('/categories');
 export const getArtisans = () => api('/artisans');
 
-// The product cards show the artisan's name, so we add it to each product.
+// Upload an image file to /api/seller/upload and return { url }
+export async function uploadImage(file, token) {
+  const form = new FormData();
+  form.append('image', file);
+  let res;
+  try {
+    res = await fetch(`${API_URL}/seller/upload`, {
+      method: 'POST',
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+      body: form,
+    });
+  } catch (e) {
+    throw new ApiError('Cannot reach the server. Please make sure the backend is running.', 0);
+  }
+  let json = null;
+  try {
+    json = await res.json();
+  } catch (e) {
+    // non-JSON response
+  }
+  if (!res.ok || !json || json.success === false) {
+    throw new ApiError((json && json.message) || 'Image upload failed', res.status);
+  }
+  return json.data;
+}
+
+// The product cards show the artisan's name, so we add it (and shopName for search) to each product.
 export function attachArtisanNames(products, artisans) {
-  const names = Object.fromEntries(artisans.map((a) => [a.id, a.name]));
-  return products.map((p) => ({ ...p, artisanName: names[p.artisanId] }));
+  const byId = Object.fromEntries(artisans.map((a) => [a.id, a]));
+  return products.map((p) => ({
+    ...p,
+    artisanName: byId[p.artisanId]?.name,
+    artisanShopName: byId[p.artisanId]?.shopName || '',
+  }));
 }

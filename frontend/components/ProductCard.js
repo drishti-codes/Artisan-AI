@@ -8,9 +8,12 @@ import { Heart, Star } from 'lucide-react';
 import { formatINR } from '@/lib/data';
 import { useCart } from '@/context/CartContext';
 
+const FALLBACK_IMAGE = '/images/placeholder-product.svg';
+
 export default function ProductCard({ product, index = 0 }) {
   const [liked, setLiked] = useState(false);
   const { addItem } = useCart();
+  const imgSrc = product.image || (Array.isArray(product.gallery) && product.gallery[0]) || FALLBACK_IMAGE;
 
   return (
     <motion.div
@@ -23,7 +26,7 @@ export default function ProductCard({ product, index = 0 }) {
       <Link href={`/product/${product.id}`} className="block">
         <div className="relative aspect-[4/5] overflow-hidden rounded-sm bg-beige">
           <Image
-            src={product.image}
+            src={imgSrc}
             alt={product.name}
             fill
             sizes="(max-width: 768px) 50vw, 25vw"

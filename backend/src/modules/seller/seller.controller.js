@@ -2,6 +2,16 @@
 const { sendSuccess, sendError } = require('../../utils/response');
 const sellerService = require('./seller.service');
 const AppError = require('../../utils/AppError');
+const { getPublicUrl } = require('../../utils/upload');
+
+/** POST /api/seller/upload */
+exports.uploadImage = async (req, res) => {
+  if (!req.file) {
+    throw new AppError('Image file is required', 400);
+  }
+  const url = getPublicUrl(req.file.filename);
+  sendSuccess(res, { url }, 'Image uploaded', 201);
+};
 
 /** POST /api/seller/onboard */
 exports.onboard = async (req, res) => {
@@ -17,9 +27,9 @@ exports.onboard = async (req, res) => {
 /** GET /api/seller/me */
 exports.getProfile = async (req, res) => {
   try {
-    const seller = await sellerService.getSellerForUser(req.user._id);
-    if (!seller) throw new AppError('Seller profile not found', 404);
-    sendSuccess(res, seller);
+    const profile = await sellerService.getFullProfile(req.user._id);
+    if (!profile) throw new AppError('Seller profile not found', 404);
+    sendSuccess(res, profile);
   } catch (err) {
     const status = err.statusCode || 400;
     sendError(res, err.message, status);

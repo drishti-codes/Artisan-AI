@@ -4,7 +4,8 @@ const toClientJSON = require('../../utils/toClientJSON');
 const artisanSchema = new mongoose.Schema(
   {
     slug: { type: String, required: true, unique: true, trim: true, lowercase: true }, // returned as "id"
-    name: { type: String, required: true, trim: true },
+    name: { type: String, required: true, trim: true }, // personal name
+    shopName: { type: String, default: '', trim: true, maxlength: 80 },
     craft: { type: String, required: true, trim: true },
     region: { type: String, required: true, trim: true },
     rating: { type: Number, default: 0, min: 0, max: 5 },

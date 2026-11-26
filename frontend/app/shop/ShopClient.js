@@ -47,8 +47,13 @@ export default function ShopClient() {
   }, []);
 
   const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
     let list = products.filter((p) => {
-      const matchesQuery = query.trim() === '' || p.name.toLowerCase().includes(query.toLowerCase());
+      const matchesQuery =
+        q === '' ||
+        p.name.toLowerCase().includes(q) ||
+        (p.artisanName || '').toLowerCase().includes(q) ||
+        (p.artisanShopName || '').toLowerCase().includes(q);
       const matchesCategory = category === 'all' || p.category === category;
       const matchesPrice = p.price <= maxPrice;
       return matchesQuery && matchesCategory && matchesPrice;

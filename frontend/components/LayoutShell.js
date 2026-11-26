@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { usePathname } from 'next/navigation';
 import ArtisanNavbar from '@/components/ArtisanNavbar';
@@ -8,7 +8,7 @@ import Footer from '@/components/Footer';
 
 export default function LayoutShell({ children }) {
   const pathname = usePathname();
-  const isArtisan = pathname.startsWith('/artisan') || pathname.startsWith('/seller');
+  const isArtisan = Boolean(pathname && (pathname.startsWith('/artisan') || pathname.startsWith('/seller')));
 
   return (
     <>

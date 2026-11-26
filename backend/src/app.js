@@ -1,4 +1,5 @@
 // Builds the Express app: middleware first, then routes, then error handlers.
+const path = require('path');
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
@@ -21,8 +22,11 @@ const errorHandler = require('./middleware/errorHandler');
 const app = express();
 const aiRoutes = require('./modules/ai/ai.routes');
 
-// Security headers
-app.use(helmet());
+// Security headers (allow cross-origin image loading for /uploads)
+app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
+
+// Serve uploaded images
+app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 
 // Allow only our frontend to call this API from the browser
 app.use(
